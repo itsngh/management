@@ -18,8 +18,8 @@ model User {
 	username		String						@unique
 	name			String
 	Key				Key?
-	Group			Class		@relation(fields: [group_id], references: [uuid])
-	group_id		String
+	Class			Class		@relation(fields: [class_id], references: [uuid])
+	class_id		String
 	Role			Role		@relation(fields: [role_id], references: [uuid])
 	role_id			String
 }
@@ -32,8 +32,10 @@ model Key {
 }
 
 model Class {
-	uuid			String		@db.Uuid()		@unique @id
-	User			User[]
+	uuid				String		@db.Uuid()		@unique @id
+	className			String
+	classDescription	String
+	User				User[]
 }
 
 // predefined roles, there shall only be 3, owner -> admin -> member

@@ -1,8 +1,8 @@
-import { createClient } from "redis";
-import log from "./logger";
-import * as crypto from "crypto";
-import environmentVariables from "./environment";
-import { exit } from "process";
+// import { createClient } from "redis";
+// import log from "./logger";
+// import * as crypto from "crypto";
+// import environmentVariables from "./environment";
+// import { exit } from "process";
 
 // const redis = createClient({
 // 	username: environmentVariables.REDIS_USERNAME,
@@ -23,43 +23,43 @@ import { exit } from "process";
 // 	await redis.connect();
 // })();
 
-export async function createSession(uuid: string) {
-	const session = `session-${crypto.randomBytes(64).toString("hex")}`;
-	const current_timestamp = new Date(
-		Date.now() + 6 * 1000 * 60 * 60
-	).getTime();
-	try {
-		await redis.hSet(session, {
-			session: session,
-			user_uuid: uuid,
-			expiresAt: current_timestamp,
-		});
-	} catch (err) {
-		log(`${err}`, 2);
-		return null;
-	}
-	return session;
-}
+// export async function createSession(uuid: string) {
+// 	const session = `session-${crypto.randomBytes(64).toString("hex")}`;
+// 	const current_timestamp = new Date(
+// 		Date.now() + 6 * 1000 * 60 * 60
+// 	).getTime();
+// 	try {
+// 		await redis.hSet(session, {
+// 			session: session,
+// 			user_uuid: uuid,
+// 			expiresAt: current_timestamp,
+// 		});
+// 	} catch (err) {
+// 		log(`${err}`, 2);
+// 		return null;
+// 	}
+// 	return session;
+// }
 
-export async function retrieveSession(session: string) {
-	let sessionObject = null;
-	try {
-		sessionObject = await redis.hGetAll(session);
-	} catch (err) {
-		log(`${err}`, 2);
-		return null;
-	}
-	return sessionObject;
-}
-export async function wipeSession(session: string): Promise<boolean> {
-	log(session, 5);
-	try {
-		await redis.del(session);
-	} catch (err) {
-		log(`${err}`, 2);
-		return false;
-	}
-	return true;
-}
+// export async function retrieveSession(session: string) {
+// 	let sessionObject = null;
+// 	try {
+// 		sessionObject = await redis.hGetAll(session);
+// 	} catch (err) {
+// 		log(`${err}`, 2);
+// 		return null;
+// 	}
+// 	return sessionObject;
+// }
+// export async function wipeSession(session: string): Promise<boolean> {
+// 	log(session, 5);
+// 	try {
+// 		await redis.del(session);
+// 	} catch (err) {
+// 		log(`${err}`, 2);
+// 		return false;
+// 	}
+// 	return true;
+// }
 
-export default redis;
+// export default redis;

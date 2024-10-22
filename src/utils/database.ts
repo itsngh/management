@@ -30,19 +30,20 @@ export async function retrieveKey(term: string): Promise<Key | null> {
 	let key = null;
 	switch (validateID(term)) {
 		case "username":
-			key = prisma.user.findUnique({
+			key = await prisma.user.findUnique({
 				where: { username: term },
 				select: { Key: true },
 			});
 			break;
 		case "uuid":
-			key = prisma.user.findUnique({
+			key = await prisma.user.findUnique({
 				where: { uuid: term },
 				select: { Key: true },
 			});
 			break;
 	}
-	return key;
+	if (!key) return null;
+	return key.Key;
 }
 export async function retrieveClass(term: string): Promise<any> {
 	let classroom = null;
@@ -68,8 +69,65 @@ export async function retrieveClass(term: string): Promise<any> {
 			});
 			break;
 	}
-	log(`${typeof classroom}, ${classroom}`, 5);
 	return classroom;
+}
+
+export async function retrieveClassFromUser(
+	term: string
+): Promise<Class | null> {
+	const classroom = await prisma.user.findUnique({
+		where: {
+			uuid: term,
+		},
+		select: {
+			Class: true,
+		},
+	});
+	if (!classroom) return null;
+	return classroom.Class;
+}
+
+export async function addClassMember(
+	members: Array<{ member_uuid: string }>,
+	class_uuid: string
+) {
+	const classroom = await retrieveClass(class_uuid);
+	if (!classroom) return null;
+	for (let i = 0; i < members.length; i++) {
+		await prisma.user.update({
+			where: {
+				uuid: members[i].member_uuid,
+			},
+			data: {
+				class_id: class_uuid,
+			},
+		});
+	}
+// 	await prisma.class.update({
+// 		where: {
+// 			uuid: class_uuid,
+// 		},
+// 		data: {},
+// 	});
+// }
+export async function updateClass(
+	className: string,
+	classDescription: string,
+	class_uuid: string
+) {
+	const classroom = await retrieveClass(class_uuid);
+	if (!classroom) return null;
+	const updatedClassroom = await prisma.class.update({
+		where: {
+			uuid: class_uuid,
+		},
+		data: {
+			className: className || classroom.className,
+			classDescription: classDescription || classroom.classDescription,
+		},
+	});
+	if (!updatedClassroom) return null;
+	return updatedClassroom;
 }
 
 export async function updateUser(
