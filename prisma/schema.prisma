@@ -14,25 +14,28 @@ datasource db {
 }
 
 model User {
-	uuid			String		@db.Uuid()		@unique @id
+	uuid			String		@db.Uuid()	@default(uuid())		@unique @id
+	created_at		DateTime	@default(now())
 	username		String						@unique
 	name			String
 	Key				Key?
 	Class			Class		@relation(fields: [class_id], references: [uuid])
-	class_id		String
+	class_id		String		@default("")
 	Role			Role		@relation(fields: [role_id], references: [uuid])
-	role_id			String
+	role_id			String		@default("60415127-d625-46e0-bf7f-d442fe9ce357")
 }
 
 model Key {
-	uuid			String		@db.Uuid()		@unique @id
+	uuid			String		@db.Uuid()	@default(uuid())		@unique @id
+	created_at		DateTime	@default(now())
 	User			User		@relation(fields: [user_id], references: [uuid])
 	user_id			String		@unique
 	secret			String
 }
 
 model Class {
-	uuid				String		@db.Uuid()		@unique @id
+	uuid			String		@db.Uuid()	@default(uuid())		@unique @id
+	created_at		DateTime	@default(now())
 	className			String
 	classDescription	String
 	User				User[]
@@ -40,7 +43,8 @@ model Class {
 
 // predefined roles, there shall only be 3, owner -> admin -> member
 model Role {
-	uuid			String		@db.Uuid()		@unique @id
+	uuid			String		@db.Uuid()	@default(uuid())		@unique @id
+	created_at		DateTime	@default(now())
 	role_name		String
 	User			User[]
 }

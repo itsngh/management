@@ -1,14 +1,10 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { sessionRoute } from "../../middlewares/authenticateSession";
-import {
-	retrieveClass,
-	retrieveClassFromUser,
-	retrieveUser,
-} from "../../utils/database";
+import { retrieveClass, retrieveClassFromUser } from "../../utils/db/class";
 
-export const getClass = Router();
+export const getClassRoute = Router();
 
-getClass
+getClassRoute
 	.get(
 		"/@me",
 		sessionRoute,

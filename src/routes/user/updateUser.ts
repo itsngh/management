@@ -1,10 +1,10 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { sessionRoute } from "../../middlewares/authenticateSession";
-import { retrieveUser } from "../../utils/database";
+import { retrieveUser } from "../../utils/db/user";
 
-export const updateUser = Router();
+export const updateUserRoute = Router();
 
-updateUser.put(
+updateUserRoute.put(
 	"/@me",
 	sessionRoute,
 	(req: Request, res: Response, next: NextFunction) => {

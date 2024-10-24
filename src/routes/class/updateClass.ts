@@ -1,9 +1,11 @@
 import { Router, Request, Response, NextFunction } from "express";
+import { sessionRoute } from "../../middlewares/authenticateSession";
 
-const updateClass = Router();
+export const updateClassRoute = Router();
 
-updateClass.put(
+updateClassRoute.put(
 	"/:uuid",
+	sessionRoute,
 	async (req: Request, res: Response, next: NextFunction) => {
 		const class_uuid = req.params.uuid;
 		const { className, classDescription } = req.body;

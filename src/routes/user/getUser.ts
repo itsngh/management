@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { sessionRoute } from "../../middlewares/authenticateSession";
-import { retrieveUser } from "../../utils/database";
 import { validateID } from "../../utils/sanitiser";
+import { retrieveUser } from "../../utils/db/user";
 
 export const getUserRoute = Router();
 
